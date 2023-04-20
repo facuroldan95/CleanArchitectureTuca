@@ -2,6 +2,7 @@
 using CleanArchitecture.Infrastructure.Contracts;
 using MongoDB.Driver;
 using Microsoft.Extensions.Configuration;
+using MongoDB.Bson.Serialization;
 
 namespace CleanArchitecture.Infrastructure.Persistence.MongoDb
 {
@@ -18,7 +19,7 @@ namespace CleanArchitecture.Infrastructure.Persistence.MongoDb
             _database = mongoClient.GetDatabase(databaseName);
         }
 
-        public IMongoCollection<TEntity> GetCollection<TEntity>() where TEntity : class, IEntity
+        public IMongoCollection<TEntity> GetCollection<TEntity>() where TEntity : EntityBase
         {
             return _database.GetCollection<TEntity>(typeof(TEntity).Name.ToLower());
         }

@@ -3,7 +3,7 @@ using CleanArchitecture.Domain;
 
 namespace CleanArchitecture.Application.Contracts.Persistence
 {
-    public interface IAsyncRepositoryMongoDb<T> where T : IEntity
+    public interface IAsyncRepositoryMongoDb<T> where T : EntityBase
     {
         Task<T> GetByIdAsync(string id);
         Task<IEnumerable<T>> GetAllAsync();

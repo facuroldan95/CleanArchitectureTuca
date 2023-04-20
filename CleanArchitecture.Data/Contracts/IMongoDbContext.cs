@@ -6,6 +6,6 @@ namespace CleanArchitecture.Infrastructure.Contracts
 {
     public interface IMongoDbContext
     {
-        IMongoCollection<TEntity> GetCollection<TEntity>() where TEntity : class, IEntity;
+        IMongoCollection<TEntity> GetCollection<TEntity>() where TEntity : EntityBase;
     }
 }

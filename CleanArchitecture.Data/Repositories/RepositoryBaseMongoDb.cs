@@ -4,30 +4,28 @@ using CleanArchitecture.Domain;
 using CleanArchitecture.Domain.Common;
 using CleanArchitecture.Infrastructure.Contracts;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Linq.Expressions;
 
 namespace CleanArchitecture.Infrastructure.Repositories
 {
-    public class RepositoryBaseMongoDb<T> : IAsyncRepositoryMongoDb<T> where T : IEntity
+    public class RepositoryBaseMongoDb<T> : IAsyncRepositoryMongoDb<T> where T: EntityBase
     {
         private readonly IMongoDbContext _context;
-        private readonly IMongoCollection<IEntity> _dbSet;
+        private readonly IMongoCollection<T> _dbSet;
         public RepositoryBaseMongoDb(IMongoDbContext context)
         {
             _context = context;
-            _dbSet = _context.GetCollection<IEntity>();
+            _dbSet = _context.GetCollection<T>();
         }
 
         public async Task<T> GetByIdAsync(string id)
         {
-            return (T)await _dbSet.Find(x => x.Id == id).FirstOrDefaultAsync();
+            return await _dbSet.Find(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return (IEnumerable<T>)await _dbSet.Find(x => true).ToListAsync();
+            return await _dbSet.Find(x => true).ToListAsync();
         }
         public async Task<T> AddAsync(T entity)
         {
@@ -41,11 +39,10 @@ namespace CleanArchitecture.Infrastructure.Repositories
         }
         public async Task<bool> DeleteAsync(string id)
         {
-            var filter = Builders<IEntity>.Filter.Eq(x => x.Id, id);
-            var deleteResult = await _dbSet.DeleteOneAsync(filter);
-            return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
+            var result = await _context.GetCollection<T>().DeleteOneAsync(x => x.Id == id);
+            return result.DeletedCount > 0;
         }
 
-       
+
     }
 }

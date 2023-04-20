@@ -2,11 +2,11 @@
 
 namespace CleanArchitecture.Domain
 {
-    public interface IEntity
+    public class EntityBase
     {
         [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        string? Id { get; set; }
+        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+        public string? Id { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string? CreatedBy { get; set; }
 
